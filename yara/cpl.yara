@@ -1,13 +1,13 @@
 import "pe"
 
-rule MAL_WIN_Matanbuchus_Loader_PE
+rule WIN_MAL_MATANBUCHUS_LOADER_NOV25
 {
     meta:
         description = "Detects a masqueraded CPL file used by Matanbuchus in 2024-07"
         author = "Onni Knuutila"
         date = "2025-11-25"
         reference = "https://github.com/pr0xylife/Matanbuchus/blob/main/Matanbuchus_07.03_2024.txt"
-        hash = "1ca1315f03f4d1bca5867ad1c7a661033c49bbb16c4b84bea72caa9bc36bd98b"
+        hash = "1ca1315f03f4d1bca5867ad1c7a661033c49bbb16c4b84bea72caa9bc36bd98b" // SHA256
     strings:
         $s1 = "** CHOSEN_DATA_PUM" 
         $s2 = "AppPolicyGetProcessTerminationMethod"
