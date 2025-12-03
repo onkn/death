@@ -7,7 +7,7 @@ rule WIN_MAL_TROJAN_QBOT_NOV25
         author = "Onni Knuutila"
         date = "2025-11-25"
         reference = "https://www.virustotal.com/gui/file/6a8557a2f8e1338e6edb2a07c345882389230ea24ffeb741a59621b7e8b56c59"
-        hash = "6a8557a2f8e1338e6edb2a07c345882389230ea24ffeb741a59621b7e8b56c59" // Sha256
+        hash = "6a8557a2f8e1338e6edb2a07c345882389230ea24ffeb741a59621b7e8b56c59" // SHA256
 
     strings:
         $s1 = "Tdk_window_process_all_updates"
@@ -29,8 +29,8 @@ rule WIN_MAL_TROJAN_QBOT_NOV25
 
     condition:
         pe.is_pe and
-        pe.machine == pe.MACHINE_I386 and
-        not pe.is_signed and
+        pe.machine == pe.MACHINE_I386 and not
+        pe.is_signed and
         filesize < 1000KB and
         8 of ($s*)
 }
