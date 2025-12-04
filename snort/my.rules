@@ -1,0 +1,12 @@
+# Malware Demo - Mirai Senpai
+
+alert udp $HOME_NET any -> any 53 (msg:"Potential Mirai HTTP Traffic - Rooty.cc"; content:"|05|rooty|02|cc|00|"; flowbits:set,rootycc_dns; sid:1000001;)
+alert tcp $HOME_NET any -> any 80 (msg:"GET Request URI Stems - /(mips|mpsl|x86|i5)"; flowbits:isset,rootycc_dns; flowbits:unset,rootycc_dns; pcre:"/GET \/(mips|mpsl|x86|i5)/i"; sid:1000002;)
+
+# Challenge 1 - Qbot
+# Detects Qbot C2 traffix by looking for the malicious TLS certificate. 
+# The rule matches the TLS handshake header and the certificate CN "fscej.org".
+# Direction is set to server-to-client traffi going into HOME_NET.
+
+alert tcp any any -> $HOME_NET any (msg:"QBOT: Malicious TLS certificate CN - fscej.org"; flow:established,to_client; content:"|16 03 03|"; content:"fscej.org"; classtype:trojan-activity; sid:1000003; rev:1;)
+
