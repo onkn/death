@@ -6,9 +6,8 @@ alert tcp $HOME_NET any -> any 80 (msg:"GET Request URI Stems - /(mips|mpsl|x86|
 
 # Challenge 1 - Qbot
 
-# Detects Qbot C2 traffix by looking for the malicious TLS certificate. 
+# Detects Qbot C2 traffic by looking for the malicious TLS certificate. 
 # The rule matches the TLS handshake header and the certificate CN "fscej.org".
-# Direction is set to server-to-client traffi going into HOME_NET.
 
 alert tcp any any -> $HOME_NET any (msg:"Potential Qbot: Malicious TLS certificate CN - fscej.org"; flow:established,to_client; content:"|16 03 03|"; content:"fscej.org"; classtype:trojan-activity; sid:1000003; rev:1;)
 
