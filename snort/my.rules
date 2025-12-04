@@ -4,9 +4,19 @@ alert udp $HOME_NET any -> any 53 (msg:"Potential Mirai HTTP Traffic - Rooty.cc"
 alert tcp $HOME_NET any -> any 80 (msg:"GET Request URI Stems - /(mips|mpsl|x86|i5)"; flowbits:isset,rootycc_dns; flowbits:unset,rootycc_dns; pcre:"/GET \/(mips|mpsl|x86|i5)/i"; sid:1000002;)
 
 # Challenge 1 - Qbot
+
 # Detects Qbot C2 traffix by looking for the malicious TLS certificate. 
 # The rule matches the TLS handshake header and the certificate CN "fscej.org".
 # Direction is set to server-to-client traffi going into HOME_NET.
 
-alert tcp any any -> $HOME_NET any (msg:"QBOT: Malicious TLS certificate CN - fscej.org"; flow:established,to_client; content:"|16 03 03|"; content:"fscej.org"; classtype:trojan-activity; sid:1000003; rev:1;)
+alert tcp any any -> $HOME_NET any (msg:"Potential Qbot: Malicious TLS certificate CN - fscej.org"; flow:established,to_client; content:"|16 03 03|"; content:"fscej.org"; classtype:trojan-activity; sid:1000003; rev:1;)
 
+# Challenge 2 - Astaroth/Guildma
+
+# Astaroth uses fast-changing domains but commonly relies on suspicious TLDs such as .cloud, .link, and .ga.
+
+alert udp $HOME_NET any -> any 53 (msg:"Potential Astaroth/Guildma: DNS query using suspicious TLD (.cloud/.link/.ga)"; pcre:"/(cloud|link|ga)/"; classtype:trojan-activity; sid:1000004; rev:1;)
+
+# Astaroth’s HTTP delivery stage uses long obfuscated paths ending in Visualizar_NFe, which mimics a Brazilian NFe document download.
+
+alert tcp $HOME_NET any -> any 80 (msg:"Potential Astaroth/Guildma: HTTP request with Visualizar_NFe path"; content:"GET "; content:"Visualizar_NFe"; classtype:trojan-activity; sid:1000005; rev:1;)
