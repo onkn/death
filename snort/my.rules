@@ -3,6 +3,7 @@
 alert udp $HOME_NET any -> any 53 (msg:"Potential Mirai HTTP Traffic - Rooty.cc"; content:"|05|rooty|02|cc|00|"; flowbits:set,rootycc_dns; sid:1000001;)
 alert tcp $HOME_NET any -> any 80 (msg:"GET Request URI Stems - /(mips|mpsl|x86|i5)"; flowbits:isset,rootycc_dns; flowbits:unset,rootycc_dns; pcre:"/GET \/(mips|mpsl|x86|i5)/i"; sid:1000002;)
 
+
 # Challenge 1 - Qbot
 
 # Detects Qbot C2 traffix by looking for the malicious TLS certificate. 
@@ -10,6 +11,7 @@ alert tcp $HOME_NET any -> any 80 (msg:"GET Request URI Stems - /(mips|mpsl|x86|
 # Direction is set to server-to-client traffi going into HOME_NET.
 
 alert tcp any any -> $HOME_NET any (msg:"Potential Qbot: Malicious TLS certificate CN - fscej.org"; flow:established,to_client; content:"|16 03 03|"; content:"fscej.org"; classtype:trojan-activity; sid:1000003; rev:1;)
+
 
 # Challenge 2 - Astaroth/Guildma
 
@@ -20,3 +22,14 @@ alert udp $HOME_NET any -> any 53 (msg:"Potential Astaroth/Guildma: DNS query us
 # Astaroth’s HTTP delivery stage uses long obfuscated paths ending in Visualizar_NFe, which mimics a Brazilian NFe document download.
 
 alert tcp $HOME_NET any -> any 80 (msg:"Potential Astaroth/Guildma: HTTP request with Visualizar_NFe path"; content:"GET "; content:"Visualizar_NFe"; classtype:trojan-activity; sid:1000005; rev:1;)
+
+
+# Challenge 3 - IcedID
+
+# IcedID often uses long, random-looking SNI values during its TLS ClientHello. These domains are typically 14–20 lowercase characters with common TLDs such as .com or .pro.
+
+alert tcp $HOME_NET any -> any 443 (msg:"Potential IcedID: Suspicious SNI (possible DGA domain)"; pcre:"/[a-z]{14,20}\.(com|pro)/"; classtype:trojan-activity; sid:1000006; rev:1;)
+
+# The Cobalt Strike stage is delivered via HTTP as a short-named .exe from a bare IP.
+
+alert tcp $HOME_NET any -> any 80 (msg:"Potential Cobalt Strike: Short .exe download from IP"; content:"GET /download/"; content:".exe"; pcre:"/Host:\s+[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/"; classtype:trojan-activity; sid:1000007; rev:1;)
