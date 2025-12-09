@@ -1,0 +1,41 @@
+title: Suspicious Rundll32 Execution
+id: 17f6f3be-824a-4f8d-a4ec-61fe2fd0c021
+status: experimental
+description: Detects suspicious use of rundll32 to execute scriptlets, remote URLs or non-standard payloads.
+references:
+	- https://lolbas-project.github.io/lolbas/Binaries/Rundll32/
+	- https://lolbas-project.github.io/lolbas/Libraries/Scrobj/
+author: Onni Knuutila
+date: 2025-12-09
+tags:
+  	- attack.execution
+  	- attack.defense_evasion
+  	- attack.t1218 # Signed Binary Proxy Execution
+  	- attack.t1218.011 # Rundll32
+logsource:
+  	product: windows
+  	category: process_creation
+detection:
+  	selection_image:
+    	Image|endswith: '\rundll32.exe'
+  	suspicious_arguments:
+    	CommandLine|contains:
+      		- 'javascript:' # scriptlet loading
+      		- 'vbscript:' # scriptlet loading
+      		- 'scrobj.dll' # windows script component runtime, commonly abused
+      		- '.sct' # scriptlet files
+      		- 'http://' # remote loading
+      		- 'https://' # remote loading
+      		- 'ShellExecute' # abusing exported functions
+      		- 'DllRegisterServer'
+  	suspicious_paths:
+    	CommandLine|contains:
+      		- '\AppData\' # user-writable, commonly abused
+      		- '\Temp\' # commonly abused
+  	condition: selection_image and (suspicious_arguments or suspicious_paths)
+falsepositives:
+  	- Some installers or setup tools may legitimately call rundll32 with exported functions
+  	- Certain applications may load DLLs from AppData or Temp during normal operation
+  	- Legacy Windows features may use script components (scrobj.dll, vbscript, javascript)
+  	- Occasional administrative tasks may trigger similar behavior
+level: medium
