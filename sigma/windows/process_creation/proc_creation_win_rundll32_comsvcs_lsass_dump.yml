@@ -1,0 +1,26 @@
+title: Rundll32 COMSVCS LSASS Dump
+id: a7a2de9e-9baa-483d-a600-d095ff6d6f03
+status: experimental
+description: Detects potential LSASS memory dumps using rundll32.exe and comsvcs.dll.
+references:
+    - https://thedfirreport.com/2025/08/05/from-bing-search-to-ransomware-bumblebee-and-adaptixc2-deliver-akira/
+author: Onni Knuutila
+date: 2025-12-10
+tags:
+    - attack.credential-access
+    - attack.t1003.001 # OS Credential Dumping: LSASS Memory
+    - attack.execution
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_rundll32:
+        Image|endswith: 'rundll32.exe'
+    selection_comsvcs:
+        CommandLine|contains: 'comsvcs.dll'
+    selection_dump:
+        CommandLine|contains: 'MiniDump'
+    condition: selection_rundll32 and selection_comsvcs and selection_dump
+falsepositives:
+    - Unknown
+level: high
