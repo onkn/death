@@ -18,8 +18,8 @@ detection:
         Image|endswith:
             - '\powershell.exe'
             - '\pwsh.exe'
-selection_switch:
-    CommandLine|contains:
+    selection_switch:
+        CommandLine|contains:
             - ' -EncodedCommand '
             - ' -enc '
             - ' -e '
