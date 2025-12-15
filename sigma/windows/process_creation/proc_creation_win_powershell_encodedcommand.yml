@@ -18,14 +18,16 @@ detection:
         Image|endswith:
             - '\powershell.exe'
             - '\pwsh.exe'
-    selection_switch:
-        CommandLine|contains:
+selection_switch:
+    CommandLine|contains:
             - ' -EncodedCommand '
             - ' -enc '
             - ' -e '
+            - ' -E '
             - ' /EncodedCommand '
             - ' /enc '
             - ' /e '
+            - ' /E '
     condition: selection_image and selection_switch
 falsepositives:
     - Legitimate administrative or automation scripts using encoded PowerShell
