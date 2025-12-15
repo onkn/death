@@ -14,9 +14,6 @@ on:
       - main
     paths:
       - 'sigma/**.yml'
-    paths-ignore:
-      - 'sigma/sigma_template.yml'
-
     # Allows you to run this workflow manually from the Actions tab
     workflow_dispatch:
 
@@ -37,7 +34,7 @@ jobs:
 
     - name: Validate rules
       run: |
-        sigma check sigma
+        sigma check sigma --exclude sigma_template.yml
 
     - name: Install Sigma CLI Elasticsearch backend
       if: github.event_name == 'pull_request'
