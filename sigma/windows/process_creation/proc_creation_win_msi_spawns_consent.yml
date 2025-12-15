@@ -8,7 +8,7 @@ author: Onni Knuutila
 date: 2025-12-10
 tags:
     - attack.execution
-    - attack.defense-evasion
+    - attack.defense_evasion
     - attack.t1218.007 # System Binary Proxy Execution (msiexec)
 logsource:
     product: windows
