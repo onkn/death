@@ -5,7 +5,7 @@ description: Detects suspicious MSI execution originating from user download loc
 references:
     - https://thedfirreport.com/2025/08/05/from-bing-search-to-ransomware-bumblebee-and-adaptixc2-deliver-akira/
 author: Onni Knuutila
-date: 2025-12-10
+date: 2025-12-11
 tags:
     - attack.execution
     - attack.defense-evasion
