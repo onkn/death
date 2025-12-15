@@ -2,11 +2,11 @@ title: PowerShell EncodedCommand Usage
 id: 4e8bc689-9ec9-4cc1-a25a-d14953e11df4
 status: experimental
 description: Detects PowerShell executions using the EncodedCommand parameter or common shorthand variants, a technique frequently used for obfuscated command execution.
-author: Onni Knuutila
-date: 2025-12-15
 references:
     - https://unit42.paloaltonetworks.com/unit42-pulling-back-the-curtains-on-encodedcommand-powershell-attacks/
     - https://www.atomicredteam.io/atomic-red-team/atomics/T1059.001
+author: Onni Knuutila
+date: 2025-12-15
 tags:
     - attack.execution
     - attack.t1059.001
