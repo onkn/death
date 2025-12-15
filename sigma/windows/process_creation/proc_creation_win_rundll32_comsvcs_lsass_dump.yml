@@ -7,7 +7,7 @@ references:
 author: Onni Knuutila
 date: 2025-12-10
 tags:
-    - attack.credential_access
+    - attack.credential-access
     - attack.t1003.001 # OS Credential Dumping: LSASS Memory
     - attack.execution
 logsource:
