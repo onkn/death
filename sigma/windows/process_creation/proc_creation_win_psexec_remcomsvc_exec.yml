@@ -1,0 +1,24 @@
+title: PsExec or RemCom Service Helper Executed
+id: 1b4c2d9e-6a7f-4d3a-9f1b-2c7a0e3d9a10
+status: experimental
+description: Detects execution of PsExec or RemCom helper service binaries.
+references:
+    - https://lolbas-project.github.io/lolbas/Binaries/Psexec/
+author: Onni Knuutila
+date: 2025-12-16
+tags:
+    - attack.execution
+    - attack.lateral-movement
+    - attack.t1569.002
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith:
+            - '\PSEXESVC.exe'
+            - '\RemComSvc.exe'
+    condition: selection_img
+falsepositives:
+    - Unknown
+level: high
