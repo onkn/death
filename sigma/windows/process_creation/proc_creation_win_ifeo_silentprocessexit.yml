@@ -14,16 +14,23 @@ logsource:
     product: windows
     category: process_creation
 detection:
-    selection_reg:
-        Image|endswith: '\reg.exe'
-        CommandLine|contains: ' add '
+    selection_parent:
+        Image|endswith:
+            - '\cmd.exe'
+            - '\reg.exe'
+            - '\powershell.exe'
+            - '\pwsh.exe'
+    selection_reg_add:
+        CommandLine|contains:
+            - 'REG ADD'
+            - 'reg add'
     selection_ifeo:
         CommandLine|contains:
             - 'Image File Execution Options'
             - 'GlobalFlag'
     selection_silentprocessexit:
         CommandLine|contains: 'SilentProcessExit'
-    condition: selection_reg and (selection_ifeo or selection_silentprocessexit)
+    condition: selection_parent and selection_reg_add and (selection_ifeo or selection_silentprocessexit)
 falsepositives:
     - Rare diagnostic or debugging configurations.
 level: high
