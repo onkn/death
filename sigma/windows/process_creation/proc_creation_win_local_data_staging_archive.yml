@@ -1,0 +1,37 @@
+title: Local Data Staging via Archive Creation
+id: 7c4f2b3a-9e61-4d3f-8b9d-2a4c6f8d1e55
+status: experimental
+description: Detects creation of compressed archive files in temporary or user-accessible locations, which may indicate local data staging prior to exfiltration.
+references:
+    - https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1074.001
+    - https://thedfirreport.com/2023/02/06/collect-exfiltrate-sleep-repeat/
+author: Onni Knuutila
+date: 2025-12-16
+tags:
+    - attack.collection
+    - attack.t1074.001
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith:
+            - '\powershell.exe'
+            - '\pwsh.exe'
+    selection_cmd:
+        CommandLine|contains:
+            - 'Compress-Archive'
+            - '.zip'
+    selection_path:
+        CommandLine|contains:
+            - '\Temp\'
+            - '\AppData\'
+            - '\Users\'
+            - '$env:TEMP'
+            - 'C:\Windows\Temp'
+            - 'C:\Users\Public'
+            - 'C:\ProgramData'
+    condition: selection_img and selection_cmd and selection_path
+falsepositives:
+    - Unknown
+level: medium
