@@ -1,0 +1,41 @@
+title: Potential Data Exfiltration via Rclone over FTP
+id: 9b2f1b64-9b7b-4c6a-9a3e-6f2c2b4f0a19
+status: experimental
+description: Detects potential data exfiltration over FTP using rclone.
+author: Onni Knuutila
+date: 2025-12-16
+tags:
+    - attack.exfiltration
+    - attack.t1048.003
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith:
+            - '\rclone.exe'
+            - '\powershell.exe'
+    selection_rclone_exec:
+        CommandLine|contains: 'rclone'
+    selection_ftp_remote_create:
+        CommandLine|contains|all:
+            - 'config'
+            - 'create'
+            - 'ftp'
+    selection_rclone_transfer:
+        CommandLine|contains:
+            - ' copy '
+            - 'copyto'
+            - 'sync'
+    selection_ftp_flags:
+        CommandLine|contains: '--ftp-'
+    selection_staging_paths:
+        CommandLine|contains:
+            - 'C:\Users\Public\Downloads\'
+            - 'C:\Windows\temp\'
+            - 'C:\Users\Public\'
+            - 'C:\ProgramData\'
+    condition: selection_img and selection_rclone_exec and selection_staging_paths and (selection_ftp_remote_create or (selection_rclone_transfer and selection_ftp_flags))
+falsepositives:
+    - Legitimate rclone usage for FTP-based synchronization, backups, or migrations
+level: medium
