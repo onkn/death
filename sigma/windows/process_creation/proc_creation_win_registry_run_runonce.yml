@@ -1,0 +1,26 @@
+title: Run or RunOnce Registry Autorun Entry Added
+id: 0d8e7f5b-bf6d-4f7c-9b1a-0a6b3a2e9e7d
+status: experimental
+description: Detects registry-based autorun persistence via Run or RunOnce keys.
+references:
+    - https://www.atomicredteam.io/atomic-red-team/atomics/T1547.001
+author: Onni Knuutila
+date: 2025-12-16
+tags:
+    - attack.persistence
+    - attack.t1547.001
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_reg_add:
+        Image|endswith: '\reg.exe'
+        CommandLine|contains: ' add '
+    selection_run_path:
+        CommandLine|contains:
+            - '\Software\Microsoft\Windows\CurrentVersion\Run'
+            - '\Software\Microsoft\Windows\CurrentVersion\RunOnce'
+    condition: selection_reg_add and selection_run_path
+falsepositives:
+    - Legitimate software installers or updaters.
+level: medium

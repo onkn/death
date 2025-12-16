@@ -1,0 +1,29 @@
+title: SilentProcessExit and IFEO GlobalFlag Registry Persistence
+id: 6f2a2d44-6a51-45c3-a3a6-0b7e6d2f6f9e
+status: experimental
+description: Detects registry modifications used to configure SilentProcessExit persistence and related IFEO GlobalFlag settings.
+references:
+    - https://www.atomicredteam.io/atomic-red-team/atomics/T1546.012
+author: Onni Knuutila
+date: 2025-12-16
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1546.012
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_reg:
+        Image|endswith: '\reg.exe'
+        CommandLine|contains: ' add '
+    selection_ifeo:
+        CommandLine|contains:
+            - 'Image File Execution Options'
+            - 'GlobalFlag'
+    selection_silentprocessexit:
+        CommandLine|contains: 'SilentProcessExit'
+    condition: selection_reg and (selection_ifeo or selection_silentprocessexit)
+falsepositives:
+    - Rare diagnostic or debugging configurations.
+level: high
