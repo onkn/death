@@ -1,0 +1,24 @@
+title: PsExec or RemCom Service Binary Created
+id: 5e1c3f2a-9b0d-4e8a-8a1a-3c2d1b0f6a77
+status: experimental
+description: Detects creation of PsExec or RemCom service helper binaries on disk.
+references:
+    - https://lolbas-project.github.io/lolbas/Binaries/Psexec/
+author: Onni Knuutila
+date: 2025-12-16
+tags:
+    - attack.execution
+    - attack.lateral-movement
+    - attack.t1569.002
+logsource:
+    product: windows
+    category: file_create
+detection:
+    selection_filename:
+        TargetFilename|endswith:
+            - '\PSEXESVC.exe'
+            - '\RemComSvc.exe'
+    condition: selection_filename
+falsepositives:
+    - Unknown
+level: high
