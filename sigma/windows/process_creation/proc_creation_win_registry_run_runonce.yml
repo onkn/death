@@ -20,14 +20,18 @@ detection:
             - '\powershell.exe'
             - '\pwsh.exe'
     selection_reg_add:
+        CommandLine|contains|all:
+            - 'REG'
+            - 'ADD'
+    selection_ps_write:
         CommandLine|contains:
-            - 'REG ADD'
-            - 'reg add'
+            - 'Set-ItemProperty'
+            - 'New-ItemProperty'
     selection_run_path:
         CommandLine|contains:
-            - '\Software\Microsoft\Windows\CurrentVersion\Run'
-            - '\Software\Microsoft\Windows\CurrentVersion\RunOnce'
-    condition: selection_parent and selection_reg_add and selection_run_path
+            - 'Software\Microsoft\Windows\CurrentVersion\Run'
+            - 'Software\Microsoft\Windows\CurrentVersion\RunOnce'
+    condition: selection_parent and selection_run_path and (selection_reg_add or selection_ps_write)
 falsepositives:
     - Legitimate software installers or updaters.
 level: medium
