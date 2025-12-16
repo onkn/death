@@ -1,0 +1,27 @@
+title: DISM Used to Disable Windows Defender Feature
+id: 6a4d3c9b-1c7d-49d8-9a0d-0d2f7c9a1b3e
+status: experimental
+description: Detects use of DISM to disable Windows Defender components.
+references:
+    - https://www.atomicredteam.io/atomic-red-team/atomics/T1562.001
+author: Onni Knuutila
+date: 2025-12-16
+tags:
+    - attack.defense-evasion
+    - attack.t1562.001
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith: '\dism.exe'
+    selection_cmd:
+        CommandLine|contains:
+            - '/disable-feature'
+    selection_target:
+        CommandLine|contains:
+            - 'defender'
+    condition: selection_img and selection_cmd and selection_target
+falsepositives:
+    - Unknown
+level: high
