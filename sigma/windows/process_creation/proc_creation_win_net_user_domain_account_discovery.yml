@@ -1,0 +1,28 @@
+title: Domain Account Enumeration via Net User
+id: 8f6c7d3a-0c2b-4c4e-9a8f-3d9e1a2b7c11
+status: experimental
+description: Detects domain account enumeration using the net user command with the domain switch.
+references:
+    - https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1087.002
+author: Onni Knuutila
+date: 2025-12-16
+tags:
+    - attack.discovery
+    - attack.t1087.002
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith:
+            - '\cmd.exe'
+            - '\powershell.exe'
+            - '\pwsh.exe'
+    selection_cmd:
+        CommandLine|contains:
+            - 'net user'
+            - '/domain'
+    condition: selection_img and selection_cmd
+falsepositives:
+    - Unknown
+level: medium

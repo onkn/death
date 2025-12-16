@@ -19,7 +19,9 @@ detection:
     selection_cmd:
         CommandLine|contains:
             - '/transfer'
+            - '/Transfer'
             - '/download'
+            - '/Download'
     condition: selection_img and selection_cmd
 falsepositives:
     - Unknown
