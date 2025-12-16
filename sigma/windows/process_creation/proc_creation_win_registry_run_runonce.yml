@@ -29,6 +29,8 @@ detection:
             - 'New-ItemProperty'
     selection_run_path:
         CommandLine|contains:
+            - 'SOFTWARE\Microsoft\Windows\CurrentVersion\Run'
+            - 'SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce'
             - 'Software\Microsoft\Windows\CurrentVersion\Run'
             - 'Software\Microsoft\Windows\CurrentVersion\RunOnce'
     condition: selection_parent and selection_run_path and (selection_reg_add or selection_ps_write)
