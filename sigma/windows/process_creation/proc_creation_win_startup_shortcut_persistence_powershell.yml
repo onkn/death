@@ -1,0 +1,26 @@
+title: Startup Folder Shortcut Creation via PowerShell COM
+id: 5d5bd79a-2d24-4d4d-9fd4-3c5f4b4a0e7d
+status: experimental
+description: Detects PowerShell creating a shortcut file in a Startup folder via WScript.Shell COM automation.
+references:
+    - https://github.com/redcanaryco/atomic-red-team/blob/36d49de4c8b00bf36054294b4a1fcbab3917d7c5/atomics/T1547.001/T1547.001.md#atomic-test-7---add-executable-shortcut-link-to-user-startup-folder
+author: Onni Knuutila
+date: 2025-12-17
+tags:
+    - attack.persistence
+    - attack.t1547.009
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith: '\powershell.exe'
+    selection_cmd:
+        CommandLine|contains|all:
+            - 'WScript.Shell'
+            - '.CreateShortcut'
+            - '\Start Menu\Programs\Startup'
+    condition: selection_img and selection_cmd
+falsepositives:
+    - Legitimate login automation scripts in managed environments.
+level: medium

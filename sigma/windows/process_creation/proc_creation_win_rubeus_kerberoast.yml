@@ -1,0 +1,27 @@
+title: Rubeus Kerberoast Execution
+id: 6f0d2f92-8d66-4f4c-8e45-6bb7e8f5c3a4
+status: experimental
+description: Detects Rubeus kerberoasting activity by command-line keywords commonly used to request and extract service tickets for offline cracking.
+references:
+    - https://medium.com/@menox/understanding-kerberoasting-with-rubeus-a-first-principles-approach-to-active-directory-security-94fe86007f95
+author: Onni Knuutila
+date: 2025-12-17
+tags:
+    - attack.credential-access
+    - attack.t1558.003
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith: '\rubeus.exe'
+    selection_cmd:
+        CommandLine|contains:
+            - 'kerberoast'
+            - 'asreproast'
+            - '/rc4opsec'
+            - '/nowrap'
+    condition: selection_img and selection_cmd
+falsepositives:
+    - Authorized red team or security testing.
+level: high

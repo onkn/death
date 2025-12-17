@@ -1,0 +1,25 @@
+title: Procdump LSASS Memory Dump
+id: 0c6a5f9a-7d3c-49a6-93e4-3b7c1a9c2d8f
+status: experimental
+description: Detects use of procdump to dump lsass.exe memory.
+references:
+    - https://learn.microsoft.com/en-us/sysinternals/downloads/procdump
+author: Onni Knuutila
+date: 2025-12-17
+tags:
+    - attack.credential-access
+    - attack.t1003.001
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith: '\procdump.exe'
+    selection_cmd:
+        CommandLine|contains|all:
+            - 'lsass'
+            - '-ma'
+    condition: selection_img and selection_cmd
+falsepositives:
+    - Rare diagnostic dumps by administrators.
+level: high

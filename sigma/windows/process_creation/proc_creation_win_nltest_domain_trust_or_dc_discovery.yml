@@ -1,0 +1,27 @@
+title: Nltest Domain Trust or DC Discovery
+id: 1f7c9b5d-7f4a-4ed2-a2e4-2b6dbfbf0c0f
+status: experimental
+description: Detects nltest.exe usage to enumerate domain trusts or domain controllers.
+references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/nltest
+author: Onni Knuutila
+date: 2025-12-17
+tags:
+    - attack.discovery
+    - attack.t1482
+    - attack.t1018
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith: '\nltest.exe'
+    selection_cmd:
+        CommandLine|contains:
+            - '/domain_trusts'
+            - '/dclist:'
+            - '/dsgetdc:'
+    condition: selection_img and selection_cmd
+falsepositives:
+    - Domain administrators performing routine AD troubleshooting.
+level: medium

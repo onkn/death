@@ -1,0 +1,32 @@
+title: Disable Windows Firewall via Registry or Netsh
+id: 7f7b9a5a-3e35-4a1e-8b8f-1c3d2e4f5a6b
+status: experimental
+description: Detects attempts to disable Windows Firewall using registry modification or netsh commands.
+references:
+    - https://attack.mitre.org/techniques/T1562/004/
+author: Onni Knuutila
+date: 2025-12-17
+tags:
+    - attack.defense-evasion
+    - attack.t1562.004
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_reg:
+        Image|endswith: '\reg.exe'
+        CommandLine|contains|all:
+            - 'add'
+            - 'EnableFirewall'
+            - '/d 0'
+    selection_netsh:
+        Image|endswith: '\netsh.exe'
+        CommandLine|contains|all:
+            - 'advfirewall'
+            - 'set'
+            - 'state'
+            - 'off'
+    condition: selection_reg or selection_netsh
+falsepositives:
+    - Legitimate troubleshooting in controlled admin sessions.
+level: high

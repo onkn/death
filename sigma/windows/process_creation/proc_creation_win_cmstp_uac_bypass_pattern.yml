@@ -1,0 +1,26 @@
+title: Cmstp UAC Bypass Pattern
+id: 9a1fd0b6-0b0e-4c3e-8b9a-4b5d9d4c1a22
+status: experimental
+description: Detects ccmstp.exe execution with silent install switches, which can be abused for UAC bypass and elevated execution.
+references:
+    - https://attack.mitre.org/techniques/T1548/002/
+author: Onni Knuutila
+date: 2025-12-17
+tags:
+    - attack.privilege-escalation
+    - attack.t1548.002
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith: '\cmstp.exe'
+    selection_cmd:
+        CommandLine|contains:
+            - '/s'
+            - '/au'
+            - '.inf'
+    condition: selection_img and selection_cmd
+falsepositives:
+    - Rare legitimate connection profile installs using cmstp.
+level: high
