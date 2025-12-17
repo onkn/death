@@ -1,0 +1,27 @@
+title: Scheduled Task Creation for Startup or Logon
+id: 2a9c3b66-1e3e-4d35-9dc5-4a3f0b8a2c11
+status: experimental
+description: Detects creation of scheduled tasks configured to run at startup or user logon.
+references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/schtasks
+author: Onni Knuutila
+date: 2025-12-17
+tags:
+    - attack.persistence
+    - attack.t1053.005
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith: '\schtasks.exe'
+    selection_cmd:
+        CommandLine|contains|all:
+            - '/create'
+        CommandLine|contains:
+            - '/sc onlogon'
+            - '/sc onstart'
+    condition: selection_img and selection_cmd
+falsepositives:
+    - Legitimate software installers and enterprise management tooling.
+level: medium

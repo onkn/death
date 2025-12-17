@@ -1,0 +1,21 @@
+title: Tasklist Process Discovery
+id: 8f2a0f45-47b2-43f6-bf17-87e8d2a53a31
+status: experimental
+description: Detects tasklist.exe being used to enumerate running processes, which can be used to identify security tools or targets for dumping.
+references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tasklist
+author: Onni Knuutila
+date: 2025-12-17
+tags:
+    - attack.discovery
+    - attack.t1057
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith: '\tasklist.exe'
+    condition: selection_img
+falsepositives:
+    - Administrators troubleshooting performance or software issues.
+level: low

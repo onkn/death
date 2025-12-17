@@ -1,0 +1,29 @@
+title: Rclone Exfiltration via FTP or Cloud Remote
+id: 9c8b7a6d-5e4f-4a3b-8c7d-6e5f4a3b2c1e
+status: experimental
+description: Detects rclone usage consistent with exfiltration, including copying to FTP remotes or cloud storage remotes.
+references:
+    - https://blackpointcyber.com/blog/mitigation-lessons-from-598-incident-responses-darkgate-malware-lotl-techniques-and-rclone-attacks/
+author: Onni Knuutila
+date: 2025-12-17
+tags:
+    - attack.exfiltration
+    - attack.t1048.003
+    - attack.t1567.002
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith: '\rclone.exe'
+    selection_cmd:
+        CommandLine|contains:
+            - 'config create'
+            - 'copy'
+            - 'sync'
+            - 'ftp'
+            - 'mega:'
+    condition: selection_img and selection_cmd
+falsepositives:
+    - Legitimate backup or migration jobs using rclone.
+level: high

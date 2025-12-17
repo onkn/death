@@ -1,0 +1,23 @@
+title: Akira Ransom Note File Creation
+id: 6c2f2c6a-1f4a-4c2b-9b9d-6b4b1e2d3c4a
+status: experimental
+description: Detects creation of common Akira ransomware note files,.
+references:
+    - https://www.cisa.gov/news-events/cybersecurity-advisories/aa24-109a
+author: Onni Knuutila
+date: 2025-12-17
+tags:
+    - attack.impact
+    - attack.t1486
+logsource:
+    product: windows
+    category: file_create
+detection:
+    selection_note:
+        TargetFilename|endswith: 
+            - '\YOUR_FILES.txt'
+            - '\akira_readme.txt'
+    condition: selection_note
+falsepositives:
+    - Unlikely
+level: high
